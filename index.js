@@ -95,10 +95,6 @@ function clear () {
  * Monkey-patch child_process#exec
  */
 
-function eq (aValue, anotherValue) {
-  return aValue === anotherValue;
-}
-
 function testRegexp (aValue, aPattern) {
   return aPattern.test(aValue);
 }
@@ -109,19 +105,6 @@ ps.exec = function (requestedCommand, options, callback) {
     options = {};
   }
 
-  patch(requestedCommand, options, eq, callback);
-};
-
-ps.execMatch = function (requestedCommand, options, callback) {
-  if (typeof options === 'function') {
-    callback = options;
-    options = {};
-  }
-
-  patch(requestedCommand, options, testRegexp, callback);
-};
-
-function patch (requestedCommand, options, comparisonFn, callback) {
   if (typeof callback !== 'function') {
     callback = noop;
   }
@@ -129,7 +112,7 @@ function patch (requestedCommand, options, comparisonFn, callback) {
   let fake = find(fakes, function (fake) {
     let fakeCommand = fake[0];
 
-    return comparisonFn(fakeCommand, requestedCommand);
+    return testRegexp(fakeCommand, requestedCommand);
   });
 
   if (!fake) {
@@ -137,7 +120,7 @@ function patch (requestedCommand, options, comparisonFn, callback) {
   }
 
   fake[1](callback);
-}
+};
 
 
 /**
