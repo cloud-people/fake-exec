@@ -95,12 +95,33 @@ function clear () {
  * Monkey-patch child_process#exec
  */
 
+function eq (aValue, anotherValue) {
+  return aValue === anotherValue;
+}
+
+function testRegexp (aValue, aPattern) {
+  return aPattern.test(aValue);
+}
+
 ps.exec = function (requestedCommand, options, callback) {
   if (typeof options === 'function') {
     callback = options;
     options = {};
   }
 
+  patch(requestedCommand, options, eq, callback);
+};
+
+ps.execMatch = function (requestedCommand, options, callback) {
+  if (typeof options === 'function') {
+    callback = options;
+    options = {};
+  }
+
+  patch(requestedCommand, options, testRegexp, callback);
+};
+
+function patch (requestedCommand, options, comparisonFn, callback) {
   if (typeof callback !== 'function') {
     callback = noop;
   }
@@ -108,7 +129,7 @@ ps.exec = function (requestedCommand, options, callback) {
   let fake = find(fakes, function (fake) {
     let fakeCommand = fake[0];
 
-    return fakeCommand === requestedCommand;
+    return comparisonFn(fakeCommand, requestedCommand);
   });
 
   if (!fake) {
@@ -116,7 +137,7 @@ ps.exec = function (requestedCommand, options, callback) {
   }
 
   fake[1](callback);
-};
+}
 
 
 /**
