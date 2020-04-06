@@ -95,7 +95,7 @@ function clear () {
  * Monkey-patch child_process#exec
  */
 
-function testRegexp (aValue, aPattern) {
+function testRegexp (aPattern, aValue) {
   return aPattern.test(aValue);
 }
 
