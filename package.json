@@ -1,6 +1,6 @@
 {
   "name": "@heropa/fake-exec",
-  "version": "1.1.0",
+  "version": "5.9.0",
   "description": "Fake child_process#exec output",
   "main": "index.js",
   "scripts": {
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vdemedes/fake-exec.git"
+    "url": "git+https://github.com/cloudpeople/fake-exec.git"
   },
   "keywords": [
     "mock-exec",
@@ -31,7 +31,6 @@
   "devDependencies": {
     "chai": "^3.1.0",
     "istanbul-harmony": "^0.3.16",
-    "make-lint": "vdemedes/make-lint",
     "mocha": "^2.2.5"
   },
   "files": [
